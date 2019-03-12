@@ -1,13 +1,17 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <map>
 using namespace std;
+
+
 
 class Graph{
 public: 
 
 	int n;
-    vector< vector<int> > adjList;
+    vector< vector< pair<int,int> > > adjList; //Pair -> Vertex and Edge weight
+    map<int , vector<int> > Ladder;
     int* visited;
     int * degree;
 
@@ -26,7 +30,10 @@ public:
     	//cout << "Vertex: " << vertex << endl;
 
     	int min_id = vertex;
-    	for(auto neighbor : adjList[vertex]){
+    	int neighbor;
+    	for(auto vertex_edge : adjList[vertex]){
+    		neighbor = vertex_edge.first;
+
     		if(visited[neighbor] == -1){
     			min_id = min(min_id,dfsCicle(neighbor,vertex));
     			//cout << "min_id = " << min_id << " Neighbor: " << neighbor << endl;
@@ -38,6 +45,27 @@ public:
     	visited[vertex] = min_id;
 
     	return min_id;
+    }
+
+    void detectLadders(){
+    	for(int i=0;i<n;i++){
+    		cout << visited[i] << " ";
+    		Ladder[ visited[i] ].push_back(i);
+    	}
+    	cout << endl;
+
+    	for(int i=0;i<n;i++)
+    		if(Ladder.find(i) != Ladder.end() &&  Ladder[i].size() == 1)
+    			Ladder.erase(i);
+    }
+
+    void Transform(){
+    	int k; //Ladder L_k
+    	for(auto &kv : Ladder){
+    		k = kv.second.size() / 2;
+
+    		//To-do: BFS em Ladder
+    	}
     }
 };
 
@@ -62,18 +90,18 @@ int main(int argc, char const *argv[])
     int a,b;
     for(int i=0;i<m;i++){
         cin >> a >> b;
-        graph.adjList[a].push_back(b);
-        graph.adjList[b].push_back(a);
+        graph.adjList[a].push_back( make_pair(b,1));
+        graph.adjList[b].push_back( make_pair(a,1));
     }
 
     graph.dfsCicle(0,-1);
 
-    for(int i=1;i<=n_vertex;i++){
-    	cout << i << ": ";
-    	for(int j=0;j<n_vertex;j++){
-    		if(graph.visited[j] == i)
-    			cout << j << " ";
-    	}
+    graph.detectLadders();
+
+    for(auto &kv : graph.Ladder){
+    	cout << kv.first << " => ";
+    	for(auto vertex : kv.second)
+    		cout << vertex  << " ";
     	cout << endl;
     }
 
