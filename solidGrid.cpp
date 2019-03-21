@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <map>
+#include <queue>
 using namespace std;
 
 
@@ -11,7 +12,7 @@ public:
 
 	int n;
     vector< vector< pair<int,int> > > adjList; //Pair -> Vertex and Edge weight
-    map<int , vector<int> > Ladder;
+    map<int , vector<int> > Ladder; // "Color", "Vertices in Ladder with that color"
     int* visited;
     int * degree;
 
@@ -64,6 +65,41 @@ public:
     	for(auto &kv : Ladder){
     		k = kv.second.size() / 2;
 
+    		vector<int> corner_vertex; //It is necessary to know the corner vertices
+    		for(auto vertex : kv.second){
+    			for(auto vertex_edge : adjList[vertex]){
+    				if(visited[vertex_edge.first] != visited[vertex] || degree[vertex] == 2){
+    					corner_vertex.push_back(vertex);
+    					cout << "Corner: " << vertex << endl;
+    					break;
+    				}
+    			}
+    		}
+
+    		queue<int> BFSQueue;
+    		BFSQueue.push(corner_vertex[0]);
+
+    		int BFSvisited[n];
+    		for(int i=0;i<n;i++)BFSvisited[i] = -1;
+    		BFSvisited[corner_vertex[0]] = 0;
+
+    		int current_vertex;
+    		while(!BFSQueue.empty()){
+    			current_vertex = BFSQueue.front();
+    			BFSQueue.pop();
+
+    			for(auto vertex_edge : adjList[current_vertex]){
+    				if(visited[vertex_edge.first] == visited[current_vertex] && BFSvisited[vertex_edge.first] < 0){
+    					BFSvisited[vertex_edge.first] = BFSvisited[current_vertex] + 1;
+    					BFSQueue.push(vertex_edge.first);			
+    				}
+    			}
+    		}
+
+    		for(int i=0;i<n;i++)
+    			cout << i << " -> " << BFSvisited[i] << endl;
+
+
     		//To-do: BFS em Ladder
     	}
     }
@@ -104,6 +140,8 @@ int main(int argc, char const *argv[])
     		cout << vertex  << " ";
     	cout << endl;
     }
+
+    graph.Transform();
 
 
 	return 0;
