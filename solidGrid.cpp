@@ -16,6 +16,7 @@ public:
     map<int , vector<int> > Ladder; // "Color", "Vertices in Ladder with that color"
     int* visited;
     int * degree;
+	bool* used;
 
     Graph(int const& n_vertex){
         n = n_vertex;
@@ -23,13 +24,14 @@ public:
 
         visited = new int[n+1];
         degree  = new int[n+1];
+		used = new bool[n+1];
     }
 
     int d_func(int b, int k){
     	if(b == 0)
-    		return ( (k-1) +  int((2*(k+1))/4) );
+    		return ( (k-1) +  2*int((k+1)/4) );
     	else
-    		return (   k  +   int((2*(k-1))/4) );
+    		return (   k  +   2*int((k-1)/4) );
     }
 
     int calculateDistance(int other1,int other2,int b,int k){
@@ -40,12 +42,11 @@ public:
     			weight = d_func(b,k);
     			break;
     		case 5:
-    			if(k > 1)
-    				weight = d_func(b,k-1);
+    			weight = d_func(b,k-1) + 1;
     			break;
     		case 4:
     			if(k > 2)
-    				weight = d_func(b,k-2);
+    				weight = d_func(b,k-2) + 2;
     			else
     				weight = -INF;
     			break; 
@@ -79,7 +80,6 @@ public:
 
     void detectLadders(){
     	for(int i=0;i<n;i++){
-    		cout << visited[i] << " ";
     		Ladder[ visited[i] ].push_back(i);
     	}
     	cout << endl;
@@ -90,9 +90,18 @@ public:
     }
 
     void Transform(){
+		//Detect every cicle as every cicle in a Grid Graph is a Ladder
+		dfsCicle(0,-1);
+		//Arranging vertex in a Ladder set
+    	detectLadders();
+
+		cout << "--;--; Transforming Ladders --;--;\n\n";
+
     	int k; //Ladder L_k
     	for(auto &kv : Ladder){
-    		k = (kv.second.size() / 2) - 1;
+    		k = (kv.second.size() / 2);
+
+			cout << "Current Ladder -> L_" << k << endl;
 
     		vector<int> corner_vertex; //It is necessary to know the corner vertices
     		for(auto vertex : kv.second){
@@ -144,16 +153,16 @@ public:
 
     			if (B == -1 && find(adjList[A].begin(),adjList[A].end(),make_pair(corner,1)) != adjList[A].end()) //'corner' is adjacent -> That's B
     				B = corner;
-    			else if(BFSvisited[corner] == k) // 'corner' is at distance k from A -> That's C
+    			else if(BFSvisited[corner] == k-1) // 'corner' is at distance k from A -> That's C
     				C = corner;
-    			else if(BFSvisited[corner] == k+1) // 'corner' is at distance k+1 from A -> That's D
+    			else if(BFSvisited[corner] == k) // 'corner' is at distance k+1 from A -> That's D
     				D = corner;
-    			
-    			cout << corner << " -> " << BFSvisited[corner] << endl;
     		}
 
-    		cout << A << " " << B << " " << C << " " << D << "\n";
-
+			cout << "Topology:\n";
+    		cout << A << " ---- ... ---- " << C << endl;
+			cout <<    "|               |\n";
+			cout << B << " ---- ... ---- " << D << endl;
     		/* We need to define the following distances:
 			   A to C
 			   B to D
@@ -163,14 +172,16 @@ public:
 
 			//First, distance K (A,C) & (B,D)
 			int distance = calculateDistance(B,D,0,k);
-			if(k > 1 && distance != INF){
-				adjList[A].push_back(make_pair(C,distance));
+			if(k > 2 && distance != INF){
+				cout << A << " <-> " << C << " at distance " << distance << endl;
+ 				adjList[A].push_back(make_pair(C,distance));
 				adjList[C].push_back(make_pair(A,distance));
 			}
 			
 
 			distance = calculateDistance(A,C,0,k);
-			if(k > 1 && distance != INF){
+			if(k > 2 && distance != INF){
+				cout << B << " <-> " << D << " at distance " << distance << endl;
 				adjList[B].push_back(make_pair(D,distance));
 				adjList[D].push_back(make_pair(B,distance));
 			}
@@ -178,12 +189,14 @@ public:
 			//Now, distance K+1 (A,D) & (B,C)
 			distance = calculateDistance(B,C,1,k);
 			if(distance != INF){
+				cout << A << " <-> " << D << " at distance " << distance << endl;
 				adjList[A].push_back(make_pair(D,distance));
 				adjList[D].push_back(make_pair(A,distance));
 			}
 
 			distance = calculateDistance(A,D,1,k);
 			if(distance != INF){
+				cout << B << " <-> " << C << " at distance " << distance << endl;
 				adjList[B].push_back(make_pair(C,distance));
 				adjList[C].push_back(make_pair(B,distance));
 			}
@@ -192,11 +205,12 @@ public:
 			for(auto vertex : kv.second){
 				if(find(corner_vertex.begin(),corner_vertex.end(),vertex) == corner_vertex.end() ){
 					adjList[vertex].clear();
+					degree[vertex] = 0;
 					continue;
 				}
 
     			for(int i=0; i < adjList[vertex].size();i++){
-    				if(find(corner_vertex.begin(),corner_vertex.end(),adjList[vertex][i].first) == corner_vertex.end()){
+    				if(visited[vertex] == visited[adjList[vertex][i].first] && find(corner_vertex.begin(),corner_vertex.end(),adjList[vertex][i].first) == corner_vertex.end()){
     					adjList[vertex].erase(adjList[vertex].begin()+i);
     					i--;
     				}
@@ -205,6 +219,65 @@ public:
     		
     	}
     }
+
+	int MaxWeightIndPath(int vertex,int vertexBeginning, int current_weight){
+		used[vertex] = true;
+
+		if(vertex != vertexBeginning && degree[vertex] == 2 && degree[vertexBeginning] == 2){
+			used[vertex] = false;
+			return (current_weight - 1);
+		}
+
+		int max_weight = current_weight;
+		for(auto vertex_edge : adjList[vertex]){
+			int neighbor = vertex_edge.first;
+
+			if(!used[neighbor] && degree[neighbor] >= 2 && induced(neighbor,vertex)){
+				max_weight = max( max_weight, MaxWeightIndPath(neighbor,vertexBeginning,current_weight + vertex_edge.second) );
+			}
+		}
+
+		used[vertex] = false;
+
+		return max_weight;
+	}
+
+	bool induced(int vertex, int last){
+
+        for(auto vertex_edge : adjList[vertex]){
+			int neighbor = vertex_edge.first;
+            if(neighbor != last && used[neighbor] && vertex_edge.second == 1)
+                return false;
+		}
+
+        return true;
+    }
+	
+	int MaximumTimeSolidGrid(){
+
+		Transform();
+
+		int maxPercTime = -1;
+		for(int i=0;i<n;i++){
+			//Vertices need to have degree at least 2
+			if(degree[i] < 2)
+				continue;
+			
+			int percTimeI;
+
+			for(int j=0;j<n;j++)
+				used[j] = false;
+
+			//Conditional of vertex degree
+			if(degree[i] == 2)
+				percTimeI = MaxWeightIndPath(i,i,0) + 1;
+			else
+				percTimeI = (MaxWeightIndPath(i,i,0)+2)/2;
+			
+			maxPercTime = max(maxPercTime,percTimeI);
+		}
+		return maxPercTime;
+	}
 };
 
 int main(int argc, char const *argv[])
@@ -232,18 +305,9 @@ int main(int argc, char const *argv[])
         graph.adjList[b].push_back( make_pair(a,1));
     }
 
-    graph.dfsCicle(0,-1);
+	int maxPercTime = graph.MaximumTimeSolidGrid();
 
-    graph.detectLadders();
-
-    for(auto &kv : graph.Ladder){
-    	cout << kv.first << " => ";
-    	for(auto vertex : kv.second)
-    		cout << vertex  << " ";
-    	cout << endl;
-    }
-
-    graph.Transform();
+	cout << "\n==== Graph Topology after Transform ==== \n";
 
     for(int i=0;i<n_vertex;i++){
     	cout << i << " => ";
@@ -252,7 +316,9 @@ int main(int argc, char const *argv[])
     	}
     	cout << endl;
     }
+	cout << "========================================\n\n";
 
+	cout << "Maximum Percolation Time for this graph: "  << maxPercTime << endl; 
 
 	return 0;
 }
