@@ -1,3 +1,8 @@
+// Author: Lucas Rodrigues Keiler
+// _On the Approximability of Influence in Social Networks_
+// Ning Chen - 2009
+// Pg 13
+
 #include <iostream>
 #include <vector>
 #include <queue>

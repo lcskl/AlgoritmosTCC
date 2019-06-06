@@ -1,3 +1,10 @@
+/*
+    Author: Lucas Rodrigues Keiler
+    The maximum time of 2-neighbor bootstrap percolation: Complexity results
+    Rudini Sampaio
+    Theorem 4.1, pg 5
+*/
+
 #include <iostream>
 #include <vector>
 using namespace std;

@@ -1,3 +1,11 @@
+/*
+    Author: Lucas Rodrigues Keiler
+    The maximum time of 2-neighbor bootstrap percolation: Complexity results
+    Rudini Sampaio
+    Theorem 5.1, pg 6
+
+*/
+
 #include <iostream>
 #include <algorithm>
 #include <string>

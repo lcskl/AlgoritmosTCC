@@ -1,3 +1,10 @@
+/*
+    Author: Lucas Rodrigues Keiler
+    _The maximum infection time of the P 3 convexity in graphs with bounded maximum degree_
+    Rudini Sampaio
+    Lemma 4.1, pg 9
+*/
+
 #include <iostream>
 #include <algorithm>
 #include <vector>
