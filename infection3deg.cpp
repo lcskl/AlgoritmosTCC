@@ -35,8 +35,8 @@ public:
 
         visited[vertex] = true;
 
-        for(int i=0;i<depth;i++)cout << " ";
-        cout << vertex << endl;
+        // for(int i=0;i<depth;i++)cout << " ";
+        // cout << vertex << endl;
 
         if(depth == maxDepth){
             decide = true;
@@ -64,6 +64,24 @@ public:
     }
 
 };
+
+int decide(Graph graph,int k){
+    graph.decide = false;
+
+    for(int i=0;i<graph.n;i++)
+        graph.visited[i] = false;
+
+    for(int i=0;i<graph.n && !graph.decide;i++){
+        if(graph.degree[i] == 2){
+            graph.maxDepth = k-1;
+            graph.dfsInduced(i,0);
+        }else if(graph.degree[i] == 3){
+            graph.maxDepth = 2*k - 2;
+            graph.dfsInduced(i,0);
+        }
+    }
+    return graph.decide;
+}
 
 int main() {
     int n_vertex,m = 0,k;
@@ -110,7 +128,8 @@ int main() {
                 graph.dfsInduced(i,0);
             }
         }
-        cout << "Decision (t(G) >= k): " << graph.decide << endl;
+        cout << "Decision (t(G) >= k): ";
+        cout << graph.decide << endl;
     }
 
     return 0;
