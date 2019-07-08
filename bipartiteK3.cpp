@@ -18,6 +18,7 @@ public:
     int* infected;
     int * degree;
     bool *in_N_2;
+    bool *in_N;
 
     Graph(int const& n_vertex){
         n = n_vertex;
@@ -26,6 +27,7 @@ public:
         infected = new int[n+1];
         degree  = new int[n+1];
         in_N_2 = new bool[n+1];
+        in_N = new bool[n+1];
     }
 
     bool is_t_greater_3(){
@@ -38,7 +40,8 @@ public:
             
             for(int i=0;i<n;i++){
                 in_N_2[i] = false;
-                if(degree[i] == 1)
+                in_N[i] = false;
+                if(degree[i] == 1) //T_0
                     infected[i] = 0;
                 else
                     infected[i] = -1;
@@ -60,6 +63,14 @@ public:
                     }
                 }
             }
+
+            //Infect N_3
+            for(int i=0;i<n;i++){
+                if(!in_N_2[i] && !in_N[i] && i != u){
+                    infected[i] = 0;
+                }
+            }
+
             vector<int> infected_in_simulation;
  
             //Iterate over all Neighborhood
