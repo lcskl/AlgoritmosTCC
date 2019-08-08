@@ -1,0 +1,11 @@
+{
+  "name": "solidgrid",
+  "version": "1.0.0",
+  "description": "solid grid i/o",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lucas Keiler",
+  "license": "ISC"
+}

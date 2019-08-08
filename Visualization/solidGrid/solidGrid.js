@@ -181,7 +181,7 @@ function onHover(event){
     let cx = event.clientX - rect.left;
     let cy = event.clientY - rect.top;
 
-    console.log("Mouse pos: ",cx,cy);
+    //console.log("Mouse pos: ",cx,cy);
 
     let overSomeEdge = false;
 
@@ -189,7 +189,7 @@ function onHover(event){
         for(let j=0;j<ordemGrid;j++){
 
             if( inEdge(i,j,cx,cy) ){
-                console.log("DENTRO");
+                //console.log("DENTRO");
                 overSomeEdge = true;
                 break;
             }
@@ -199,4 +199,85 @@ function onHover(event){
     if( overSomeEdge === false){
         refresh();
     }
+}
+
+function executeAlgorithm(){
+    let grafo = {
+        n: 0,
+        grau: [],
+        arestas: []      
+    };
+
+    
+
+    grafo.n = selectedVertex.length;
+    grafo.grau = new Array(grafo.n).fill(0);
+    let mapped = new Array(ordemGrid*ordemGrid).fill(-1);
+    let id = 0;
+
+
+    for(let aresta of selectedEdge_H){
+
+        let v1 = 0, v2 = 0;
+        if( mapped[aresta] !== -1 ){
+            v1 = mapped[aresta];
+        }else{
+            v1 = id;
+            mapped[aresta] = id;
+            id += 1;
+        }
+
+        if( mapped[aresta+1] !== -1 ){
+            v2 = mapped[aresta+1];
+        }else{
+            v2 = id;
+            mapped[aresta+1] = id;
+            id += 1;
+        }
+
+        grafo.grau[v1] += 1;
+        grafo.grau[v2] += 1;
+
+        let edge = {
+            a: v1,
+            b: v2
+        };
+
+        grafo.arestas.push(edge);
+    }
+
+    for(let aresta of selectedEdge_V){
+
+        let v1 = 0, v2 = 0;
+        if( mapped[aresta] !== -1 ){
+            v1 = mapped[aresta];
+        }else{
+            v1 = id;
+            mapped[aresta] = id;
+            id += 1;
+        }
+
+        if( mapped[aresta+ordemGrid] !== -1 ){
+            v2 = mapped[aresta+ordemGrid];
+        }else{
+            v2 = id;
+            mapped[aresta+ordemGrid] = id;
+            id += 1;
+        }
+
+        grafo.grau[v1] += 1;
+        grafo.grau[v2] += 1;
+
+        let edge = {
+            a: v1,
+            b: v2
+        };
+
+        grafo.arestas.push(edge);
+    }
+
+    console.log('Returns: ',grafo);
+
+    const serialized = JSON.stringify(grafo);
+    
 }
