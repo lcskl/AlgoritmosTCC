@@ -1,38 +1,25 @@
-const http = require('http');
-const path = require('path');
-const fs = require('fs');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-const server = http.createServer((req,res) => {
-    let filePath = path.join(__dirname, req.url === "/" ? "solidGrid.html" : req.url);
+const app = express();
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 
-    let extName = path.extname(filePath);
 
-    let contentType = "text/html";
-
-    switch(extName){
-        case ".js":
-            contentType = "text/javascript";
-            break;
-        case ".css":
-            contentType = "text/css";
-            break;
-    }
-
-    if (contentType == "text/html" && extName == "") filePath += ".html";
-
-    fs.readFile(filePath, (err, content) => {
-        if (err) {
-            //  Some server error
-            res.writeHead(500);
-            res.end(`Server Error: ${err.code}`);
-        } else {
-        // Success
-        res.writeHead(200, { "Content-Type": contentType });
-        res.end(content, "utf8");
-        }
-    });
+app.get('/api', (req,res) => {
+    console.log('API');
+    res.send('API');
 });
+
+app.post('/', (req,res) => {
+    console.log(req.body);
+    res.send('POST response');
+});
+
+app.use(express.static(__dirname));
+
+
 
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => console.log(`Server running on ${PORT}`));
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

@@ -1,3 +1,4 @@
+
 let ordemGrid = 7;
 let r = 10;
 let selectedVertex = [];
@@ -7,6 +8,8 @@ let selectedEdge_V = [];
 let canvas;
 let ctx;
 let rect;
+
+let request;
 
 function draw(){
     canvas = document.getElementById("canvas");
@@ -279,5 +282,21 @@ function executeAlgorithm(){
     console.log('Returns: ',grafo);
 
     const serialized = JSON.stringify(grafo);
-    
+
+    post(serialized);
+}
+
+function post(_data) {
+    var data = _data;
+    var request = new XMLHttpRequest();
+    request.open('POST', 'http://localhost:5000', true);
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.onload = function() {
+        if (request.status >= 200 && request.status < 400) console.log(request.responseText);
+        else console.log(1, 'Houve um erro :(',request.status);
+    };
+    request.onerror = function() {
+        console.log(2, 'Houve um erro :(',request.status);
+    };
+    request.send(data);
 }
