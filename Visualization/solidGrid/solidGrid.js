@@ -292,7 +292,10 @@ function post(_data) {
     request.open('POST', 'http://localhost:5000', true);
     request.setRequestHeader('Content-Type', 'application/json');
     request.onload = function() {
-        if (request.status >= 200 && request.status < 400) console.log(request.responseText);
+        if (request.status >= 200 && request.status < 400){
+            let div = document.getElementById("divResp");
+            div.innerText = 'Tempo máximo de percolação = ' + JSON.stringify( parseInt(request.responseText) );
+        } 
         else console.log(1, 'Houve um erro :(',request.status);
     };
     request.onerror = function() {
