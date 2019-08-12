@@ -30,18 +30,19 @@ app.post('/', (req,res) => {
 
     testCase += '\n';
 
-
     fs.writeFile('input.txt',testCase, (err) => {
         if(err) throw err;
         console.log('Input file created');
     });
 
-    exec('./solidGrid.o file' , { stdio: 'ignore' } ,(error,stdout,stderr) => {
-        console.log('Graph processed');
+    let childProcess = exec('./solidGrid.o file');
+
+    childProcess.stdout.pipe(process.stdout);
+    childProcess.on('exit', () => {
         fs.readFile('out.txt', "utf8" , (err,data) => {
+            console.log('Data: ',data);
             res.send(data);
         });
-        
     });
 
 });
