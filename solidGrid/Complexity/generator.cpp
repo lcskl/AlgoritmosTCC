@@ -5,15 +5,6 @@
 #include "generator.h"
 using namespace std;
 
-Graph::Graph(int const& n_vertex){
-    n = n_vertex;
-    adjList.resize(n);
-
-    visited = new int[n+1];
-    degree  = new int[n+1];
-    used = new bool[n+1];
-}
-
 Graph generate_graph(int n){
     Graph g(n);
 
@@ -72,9 +63,9 @@ Graph generate_graph(int n){
             v_created++;
         }
     }
-    for(int i=0;i<n;i++)
-        cout << in_ladder[i] << " ";
-    cout << endl << endl;
+    // for(int i=0;i<n;i++)
+    //     cout << in_ladder[i] << " ";
+    // cout << endl << endl;
 
     return g;
 }

@@ -1,28 +1,44 @@
-#include <iostream>
+#include <cstdio>
+#include <fstream>
+#include <chrono>
+#include <vector>
 #include "generator.h"
 using namespace std;
 
 int main (){
-    int n;
-    
-    while(cin >> n && n > 0){
-        Graph g = generate_graph(n);
+    vector< pair<int,double> > times;
+    for(int i=10;i<=145;i++){
+        printf("Generating...");
 
-        cout << g.n << endl;
-        for(int i=0;i<g.n;i++){
-            cout << g.degree[i] << " ";
-        }
-        cout << endl;
+        Graph g = generate_graph(i);
 
-        for(int i=0;i<n;i++){
-            for(auto v : g.adjList[i]){
-                cout << v.first << " ";
-            }
-            cout << endl;
-        }
+        printf("done\n");
 
-        cout << endl;
+	    auto start = chrono::steady_clock::now();
+
+        int maxTime = g.MaximumTimeSolidGrid();
+
+        auto end = chrono::steady_clock::now();
+
+        auto p = make_pair(i,chrono::duration_cast<chrono::microseconds>(end - start).count()/1000.0);
+
+        printf("%d %f\n",p.first,p.second);
+
+        times.push_back( p );
     }
+
+    ofstream file;
+    file.open("time.txt");
+    file << "X = [";
+    for(auto x : times){
+        file << x.first << ", ";
+    }
+    file << "]\nY = [";
+    for(auto x : times){
+        file << x.second << ", ";
+    }
+    file << "]\n";
+    file.close();
 
     return 0;
 }
