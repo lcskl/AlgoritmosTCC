@@ -170,8 +170,9 @@ function onClick(event){
 
     for(let i=0; i<ordemGrid;i++){
         for(let j=0;j<ordemGrid;j++){
-
+            let div = document.getElementById("divResp");
             if( inVertex(i,j,cx,cy) || inEdge(i,j,cx,cy,true)){
+                div.innerText = '';
                 refresh();
                 break;
             }
@@ -277,6 +278,14 @@ function executeAlgorithm(){
         };
 
         grafo.arestas.push(edge);
+    }
+
+    for(let g of grafo.grau){
+        if(g === 0 || g > 3){
+            let div = document.getElementById("divResp");
+            div.innerText = 'Cada vértice deve ter 0 < grau <= 3 ';
+            return;
+        }
     }
 
     console.log('Returns: ',grafo);
