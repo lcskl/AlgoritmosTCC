@@ -2,6 +2,7 @@
 #include <cmath>
 #include <queue>
 #include <iostream>
+#include <random>
 
 Graph::Graph(int const& n_vertex){
     n = n_vertex;
@@ -67,14 +68,15 @@ Graph generate_3deg_graph(int round){
 
     int n_vertices = 1 + 3*(((int)pow(2,n-1)) - 1);
 
-    int degree[n_vertices+1];
     int terminalThreshold = n_vertices - 3*((int)pow(2,n-2));
+
+    Graph inputGraph(n_vertices);
 
     for(int i=0;i<n_vertices;i++){
         if(i < terminalThreshold)
-            degree[i] = 3;
+            inputGraph.degree[i] = 3;
         else 
-            degree[i] = 1;
+            inputGraph.degree[i] = 1;
     }
 
     std::vector< std::pair<int,int> > edges;
@@ -93,10 +95,6 @@ Graph generate_3deg_graph(int round){
     }
 
     //Output
-
-    Graph inputGraph(n_vertices);
-
-    inputGraph.degree = degree;
 
     for(auto edge : edges){
         int v1,v2;
@@ -226,6 +224,50 @@ Graph generate_inf_cycle(int v){
 
             input.adjList[i].push_back((v-2));
             input.adjList[v-2].push_back(i);
+        }
+    }
+
+    return input;
+}
+
+Graph generate_rand_caterpillar_center2d(int v, int *r){
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> distV(1,v-2);
+
+    int a = distV(rng); //a + b + 1 = v;
+    int b = v - a - 1;
+
+    *r = a;
+
+    int n = v + b + a + 2;
+
+    Graph input(n);
+
+    for(int i=0;i<n;i++){
+        if(i < a || (i >= a+1 && i < v) )
+            input.degree[i] = 3;
+        else if (i >= v)
+            input.degree[i] = 1;
+        else 
+            input.degree[i] = 2;
+    }
+
+    for(int i=0;i<v;i++){
+        input.adjList[i].push_back(i+1);
+        input.adjList[i+1].push_back(i);
+    }
+
+    //Corner Cases
+    input.adjList[0].push_back(n-1);
+    input.adjList[n-1].push_back(0);
+    
+    int next = v+1;
+    for(int i=v-1;i>=0;i--){
+        if(i!=a){
+            input.adjList[i].push_back(next);
+            input.adjList[next].push_back(i);
+            next++;
         }
     }
 

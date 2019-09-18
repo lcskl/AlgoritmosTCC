@@ -32,4 +32,6 @@ Graph generate_complete_caterpillar(int v);
 
 Graph generate_inf_cycle(int v);
 
+Graph generate_rand_caterpillar_center2d(int v, int *r);
+
 #endif

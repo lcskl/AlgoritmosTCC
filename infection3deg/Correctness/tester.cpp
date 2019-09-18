@@ -1,90 +1,161 @@
 #include <cstdio>
 #include "infection3deg_lib.hpp"
 #include <cmath>
+#include <algorithm>
+#include <fstream>
 
 int main (){
     
+    std::ofstream outFile;
+    outFile.open("correctnessReport.txt");
+
+
+
+    int total, correct;
     printf("============== Correctness Tests ===================\n");
 
     printf(" Caterpillar Graph \n");
 
     //Caterplillar Graphs
-    for(int i=3;i<=21;i+=2){
+    total = correct = 0;
+    for(int i=3;i<=41;i+=2){
         Graph x = generate_caterpillar(i);
+
+        
 
         printf("N = %d : [",i);
 
         for(int j=1;j<=i;j++){
             bool resp = decide(x,j);
-
-            if((resp && j <= floor(i/2)) || (!resp && j > floor(i/2)))
+            total++;
+            if((resp && j <= floor(i/2)) || (!resp && j > floor(i/2))){
                 printf("+");
-            else 
+                correct++;
+            }else 
                 printf("*");
         }
 
         printf("]\n\n");
     }
+
+    outFile << total << " " << correct << std::endl;
 
     printf(" Path Graph \n");
 
     //Path Graphs
-    for(int i=3;i<=21;i+=2){
+    total = correct = 0;
+    for(int i=3;i<=41;i+=2){
         Graph x = generate_path(i);
+
+        
 
         printf("N = %d : [",i);
 
         for(int j=1;j<=i;j++){
             bool resp = decide(x,j);
-
-            if((resp && j == 1) || (!resp && j>1))
+            total++;
+            if((resp && j == 1) || (!resp && j>1)){
                 printf("+");
-            else 
+                correct++;
+            }else 
                 printf("*");
         }
 
         printf("]\n\n");
     }
+    outFile << total << " " << correct << std::endl;
 
     printf(" 'Complete' Caterpillar Graph \n");
 
     //Caterplillar Graphs
-    for(int i=4;i<=22;i+=2){
+    total = correct = 0;
+    for(int i=4;i<=30;i+=2){
         Graph x = generate_complete_caterpillar(i);
+        
 
         printf("N = %d : [",i);
 
         for(int j=1;j<=i;j++){
             bool resp = decide(x,j);
-
-            if((resp && j <= floor((i-1)/2)) || (!resp && j > floor((i-1)/2)))
+            total++;
+            if((resp && j <= floor((i-1)/2)) || (!resp && j > floor((i-1)/2))){
+                correct++;
                 printf("+");
-            else 
+            }else 
                 printf("*");
         }
 
         printf("]\n\n");
     }
-
+    outFile << total << " " << correct << std::endl;
     printf(" Infection Cycle Graph \n");
 
     //Infection Cycle
-    for(int i=6;i<=32;i+=4){
+    total = correct = 0;
+    for(int i=6;i<=52;i+=4){
         Graph x = generate_inf_cycle(i);
-
+        
         printf("N = %d : [",i);
 
         for(int j=1;j<=i;j++){
             bool resp = decide(x,j);
-
-            if((resp && j <= ((i/2 - 1)/2 + 1)) || (!resp && j > ((i/2 - 1)/2 + 1)))
+            total++;
+            if((resp && j <= ((i/2 - 1)/2 + 1)) || (!resp && j > ((i/2 - 1)/2 + 1))){
+                correct++;
                 printf("+");
-            else 
+            }else 
                 printf("*");
         }
 
         printf("]\n\n");
     }
+    outFile << total << " " << correct << std::endl;
+    printf(" Random Caterpillar Graph \n");
+
+    //Random Caterpillar
+    total = correct = 0;
+    for(int i=6;i<=52;i+=4){
+        int a = 0;
+        Graph x = generate_rand_caterpillar_center2d(i,&a);
+        
+        printf("N = %d : [",i);
+
+        for(int j=1;j<=x.n;j++){
+            bool resp = decide(x,j);
+            total++;
+            if((resp && j <= (std::max(a,i-a-1)+1)) || (!resp && j > (std::max(a,i-a-1)+1))){
+                printf("+");
+                correct++;
+            }else 
+                printf("*");
+        }
+
+        printf("]\n\n");
+    }
+    outFile << total << " " << correct << std::endl;
+    printf(" Worst 3deg Graph \n");
+    total = correct = 0;
+    for(int i=2;i<=10;i++){
+        Graph x = generate_3deg_graph(i);
+
+        printf("N = %d : [",i);
+        
+        for(int j=1;j<=x.n;j++){
+            bool resp = decide(x,j);
+            total++;
+            if((resp && j <= (i-1)) || (!resp && j > (i-1))){
+                printf("+");
+                correct++;
+            }else{ 
+                printf("*");
+            }
+        }
+
+
+        printf("]\n\n");
+    }
+    outFile << total << " " << correct << std::endl;
+    outFile.close();
 
     return 0;
 }
