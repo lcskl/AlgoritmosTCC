@@ -1,44 +1,68 @@
 #include <cstdio>
+#include <iostream>
 #include <fstream>
 #include <chrono>
 #include <vector>
 #include "generator.h"
+
+#define MAXN 1500100
+
 using namespace std;
 
+double exec_times[MAXN];
+int ladders[MAXN];
+
 int main (){
-    vector< pair<int,double> > times;
-    for(int i=10;i<=145;i++){
-        printf("Generating...");
+    printf("=== Start Complexity Test for Solid Grid algorithm ===\n\n");
+    printf("Maximum Vertex Size: ");
 
-        Graph g = generate_graph(i);
+    int n;
+    scanf("%d",&n);
 
-        printf("done\n");
+    std::ofstream outFile;
+    outFile.open("complexityExecTimes.txt");
 
-	    auto start = chrono::steady_clock::now();
+    
 
-        int maxTime = g.MaximumTimeSolidGrid();
+    printf("Starting\n");
 
-        auto end = chrono::steady_clock::now();
+    for(int i=10;i<=n;i+=100){
 
-        auto p = make_pair(i,chrono::duration_cast<chrono::microseconds>(end - start).count()/1000.0);
+        printf("\n ------------------------------------------------------ \n");
 
-        printf("%d %f\n",p.first,p.second);
+        printf("  Test for Vertex Set Size %d  ...\n",i);
 
-        times.push_back( p );
+        printf("  Generating Input Graph ... ");
+
+        pair<Graph,int> out = generate_random_solidGrid(i);
+
+        Graph input = out.first;
+        ladders[i] = out.second;
+
+
+        printf("    done!\n  Starting algorithm execution ....");
+
+
+        auto start = std::chrono::high_resolution_clock::now();
+
+        int k = input.MaximumTimeSolidGrid();
+
+        auto end = std::chrono::high_resolution_clock::now();
+
+        printf("  .... done!\n");
+
+        std::chrono::duration<double> elapsed = end - start;
+        
+        printf("  Execution time: %lf s\n",elapsed.count());
+
+        exec_times[i] = elapsed.count();
+
+        outFile << i << " " << exec_times[i] << " " << ladders[i] << std::endl;
+
+        printf("\n ------------------------------------------------------ \n");
     }
 
-    ofstream file;
-    file.open("time.txt");
-    file << "X = [";
-    for(auto x : times){
-        file << x.first << ", ";
-    }
-    file << "]\nY = [";
-    for(auto x : times){
-        file << x.second << ", ";
-    }
-    file << "]\n";
-    file.close();
+    outFile.close();
 
-    return 0;
+    printf("======== END OF EXECUTION ========= \n");
 }

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <map>
 #include <queue>
+#include <chrono>
 using namespace std;
 
 #define INF 999999999
@@ -85,7 +86,7 @@ void Graph::detectLadders(){
 void Graph::Transform(){
     //Detect every cicle as every cicle in a Grid Graph is a Ladder
     //printf("[Transform] dfsCycle\n");
-    printf("1.");
+    //printf("1.");
     dfsCicle(0,-1);
 
     // for(int i=0;i<n;i++){
@@ -95,7 +96,7 @@ void Graph::Transform(){
 
     //Arranging vertex in a Ladder set
     //printf("[Transform] detectLadders\n");
-    printf("2.");
+    //printf("2.");
     detectLadders();
 
     // for(int i=0;i<n;i++){
@@ -105,7 +106,7 @@ void Graph::Transform(){
 
     int k; //Ladder L_k
     //printf("[Transform] iterating over ladders\n");
-    printf("3.");
+    //printf("3.");
     for(auto &kv : Ladder){
         k = (kv.second.size() / 2);
 
@@ -206,7 +207,7 @@ void Graph::Transform(){
         }
 
         //printf("[Transform] delete Vertices\n");
-        printf("4.");
+        //printf("4.");
         //Now, delete remaining vertices of the ladder
         for(auto vertex : kv.second){
             if(find(corner_vertex.begin(),corner_vertex.end(),vertex) == corner_vertex.end() ){
@@ -222,17 +223,21 @@ void Graph::Transform(){
                 }
             }
         }
-        printf("5..");
+        //printf("5..");
     }
 }
 
 int Graph::MaxWeightIndPath(int vertex,int vertexBeginning, int current_weight){
     used[vertex] = true;
 
-    if(vertex != vertexBeginning && degree[vertex] == 2 && degree[vertexBeginning] == 2){
-        used[vertex] = false;
-        return (current_weight - 1);
-    }
+    if(vertex != vertexBeginning && degree[vertex] == 2){
+        if (degree[vertexBeginning] == 2){
+        //used[vertex] = false;
+            return (current_weight - 1);
+        }else{
+            return current_weight;
+        }
+    } 
 
     int max_weight = current_weight;
     for(auto vertex_edge : adjList[vertex]){
@@ -243,7 +248,7 @@ int Graph::MaxWeightIndPath(int vertex,int vertexBeginning, int current_weight){
         }
     }
 
-    used[vertex] = false;
+    //used[vertex] = false;
 
     return max_weight;
 }
@@ -268,11 +273,20 @@ int Graph::MaximumTimeSolidGrid(){
         visited[i] = -1;
     }
 
-    printf("T...");
+    auto start = std::chrono::high_resolution_clock::now();
 
     Transform();
 
+    // auto end = std::chrono::high_resolution_clock::now();
+    // //printf("T...");
+
+    // std::chrono::duration<double> elapsed = end - start;
+        
+    // printf("\nTransform time: %lf s\n",elapsed.count());
+
     // printf("[End] Transform\n");
+
+    //start = std::chrono::high_resolution_clock::now();
 
     int maxPercTime = -1;
     for(int i=0;i<n;i++){
@@ -294,7 +308,11 @@ int Graph::MaximumTimeSolidGrid(){
         maxPercTime = max(maxPercTime,percTimeI);
     }
 
-    printf("F...");
+    // end = std::chrono::high_resolution_clock::now();
+    // elapsed = end - start;
+    // printf("  MaxWeight time: %lf s\n",elapsed.count());
+
+    //printf("F...");
 
     return maxPercTime;
 }
