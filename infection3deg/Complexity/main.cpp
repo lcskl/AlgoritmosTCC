@@ -5,6 +5,24 @@
 #include <fstream>
 
 int main (){
+    // int n;
+    // scanf("%d",&n);
+
+    // Graph x = generate_diamond_graph(n);
+
+    // for(int i=0;i<x.n;i++)
+    //     printf("%d ",x.degree[i]);
+    
+    // printf("\n");
+
+    // for(int i=0;i<x.n;i++){
+    //     printf("%d: ",i);
+    //     for(auto viz : x.adjList[i]){
+    //         printf("%d ",viz);
+    //     }
+    //     printf("\n");
+    // }
+
     printf("=== Start Complexity Test for Max 3-deg algorithm ===\n\n");
     printf("Maximum Round Size: ");
 
@@ -13,20 +31,26 @@ int main (){
 
     double exec_times[m+1];
 
+    std::ofstream outFile;
+    outFile.open("complexityExecTimes.txt");
+
     for(int i=2;i<=m;i++){
-        int n_vertices = 1 + 3*(((int)pow(2,i-1)) - 1);
 
         printf("\n ------------------------------------------------------ \n");
 
-        printf("  Test for round %d ( Vertex Set Size %d ) ...\n",i,n_vertices);
+        
 
         printf("  Generating Input Graph ... ");
 
-        Graph input = generate_3deg_graph(i);
+        Graph input = generate_diamond_graph(i);
+
+        printf("  Test for round %d ( Vertex Set Size %d ) ...\n",i,input.n);
 
         printf("    done!\n  Starting algorithm execution ....");
 
-        int k = log2(n_vertices); //Assuming constant c = 1
+        int k = log2(input.n); //Assuming constant c = 1
+
+        printf(" (k = %d) ",k);
 
         auto start = std::chrono::high_resolution_clock::now();
 
@@ -42,6 +66,8 @@ int main (){
 
         exec_times[i] = elapsed.count();
 
+        outFile << i << " " << exec_times[i] << std::endl;
+
         printf("\n ------------------------------------------------------ \n");
     }
 
@@ -49,7 +75,6 @@ int main (){
     printf("Tests Ended!\n 1-Write Results to a file \n 2-Print in Console \nYour choice: ");
     scanf("%d",&outChoice);
 
-    std::ofstream outFile;
     switch(outChoice){
         case 1:
             outFile.open("complexityExecTimes.txt");
@@ -68,5 +93,5 @@ int main (){
             break;
     }
 
-    printf("======== END OF EXECUTION ========= \n");
+     printf("======== END OF EXECUTION ========= \n");
 }

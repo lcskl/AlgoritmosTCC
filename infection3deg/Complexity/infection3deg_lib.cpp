@@ -1,6 +1,7 @@
 #include "infection3deg_lib.hpp"
 #include <cmath>
 #include <queue>
+#include <iostream>
 
 Graph::Graph(int const& n_vertex){
     n = n_vertex;
@@ -95,8 +96,6 @@ Graph generate_3deg_graph(int round){
 
     Graph inputGraph(n_vertices);
 
-    inputGraph.degree = degree;
-
     for(auto edge : edges){
         int v1,v2;
         v1 = edge.first;
@@ -105,5 +104,84 @@ Graph generate_3deg_graph(int round){
         inputGraph.adjList[v1].push_back(v2);
         inputGraph.adjList[v2].push_back(v1);
     }
+
+    for(int i=0;i<n_vertices;i++)
+        inputGraph.degree[i] = inputGraph.adjList[i].size();
+
     return inputGraph;
+}
+
+Graph generate_brick_wall(int n){
+    int n_vertices = n*n;
+    Graph out(n_vertices);
+
+    //Horizontal edges
+    for(int i=0;i<n_vertices;i++){
+        if((i+1)%n!=0){
+            out.adjList[i].push_back(i+1);
+            out.adjList[i+1].push_back(i);
+        }
+    }
+
+    //Vertical Edges
+    bool even = true;
+    for(int i=0;i<(n_vertices-n);i++){
+        if(i && i%n==0)
+            even = !even;
+        
+        if((even && ((i%n)%2)==0) || (!even &&  (i%n)%2)){
+            out.adjList[i].push_back(i+n);
+            out.adjList[i+n].push_back(i);
+        }
+    }
+
+    for(int i=0;i<n_vertices;i++){
+        out.degree[i] = out.adjList[i].size();
+    }
+
+    return out;
+}
+
+Graph generate_double_cycle(int n){
+
+    Graph input(n);
+
+    for(int i=0;i<n/2;i++){
+        input.adjList[i].push_back(  ((i+1)>=(n/2)) ? 0 : (i+1) );
+
+        input.adjList[i].push_back( ((i-1)<0) ? (n/2 -1) : (i-1) );
+
+        input.adjList[i].push_back( i + n/2 );
+        input.adjList[i + n/2].push_back(i);
+    }
+
+    for(int i=n/2;i<n;i++){
+        input.adjList[i].push_back(  ((i+1)>=(n)) ? n/2 : (i+1) );
+
+        input.adjList[i].push_back( ((i-1)<(n/2)) ? (n-1) : (i-1) );
+    }
+
+    for(int i=0;i<n;i++)
+        input.degree[i] = input.adjList[i].size();
+
+    return input;
+}
+
+Graph generate_diamond_graph(int round){
+    Graph input = generate_3deg_graph(round);
+    int terminalThreshold = input.n - 3*((int)pow(2,round-2));
+
+    for(int i=terminalThreshold;i<input.n;i+=2){
+        input.adjList[i].push_back( ((i+1)>=input.n) ? terminalThreshold : (i+1) );
+        input.adjList[((i+1)>=input.n) ? terminalThreshold : (i+1)].push_back(i);
+
+        input.degree[i] = 3;
+        input.degree[((i+1)>=input.n) ? terminalThreshold : (i+1)] = 3;
+    }
+
+    // for(int i=0;i<input.n;i++)
+    //     printf("%d ",input.degree[i]);
+    // printf("\n");
+
+    return input;
 }

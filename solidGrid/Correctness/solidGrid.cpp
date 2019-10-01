@@ -12,9 +12,9 @@ Graph::Graph(int const& n_vertex){
     n = n_vertex;
     adjList.resize(n);
 
-    visited = new int[n+1];
-    degree  = new int[n+1];
-    used = new bool[n+1];
+    visited = new int[n+1]();
+    degree  = new int[n+1]();
+    used = new bool[n+1]();
 }
 
 int Graph::d_func(int b, int k){

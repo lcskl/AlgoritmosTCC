@@ -3,6 +3,7 @@
 #include <queue>
 #include <iostream>
 #include <random>
+#include <stack>
 
 Graph::Graph(int const& n_vertex){
     n = n_vertex;
@@ -274,3 +275,43 @@ Graph generate_rand_caterpillar_center2d(int v, int *r){
     return input;
 }
 
+
+Graph* generate_binary_tree(int n){
+    Graph* input = new Graph(n);
+
+    std::stack<int> next;
+    next.push(0);
+
+    for(int i=0;i<n;i++)
+        input->degree[i] = 0;
+
+    int pai,esq,dir;
+    while(!next.empty()){
+        pai = next.top(); next.pop();
+
+        esq = 2*pai + 1;
+        dir = 2*pai + 2;
+
+        if(esq < n){
+            input->degree[esq]++;
+            input->degree[pai]++;
+
+            input->adjList[pai].push_back(esq);
+            input->adjList[esq].push_back(pai);
+
+            next.push(esq);
+        }
+
+        if(dir < n){
+            input->degree[dir]++;
+            input->degree[pai]++;
+
+            input->adjList[pai].push_back(dir);
+            input->adjList[dir].push_back(pai);
+
+            next.push(dir);
+        }
+    }
+
+    return input;
+}

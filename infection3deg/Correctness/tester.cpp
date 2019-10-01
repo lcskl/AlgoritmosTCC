@@ -135,7 +135,7 @@ int main (){
     outFile << total << " " << correct << std::endl;
     printf(" Worst 3deg Graph \n");
     total = correct = 0;
-    for(int i=2;i<=10;i++){
+    for(int i=2;i<=9;i++){
         Graph x = generate_3deg_graph(i);
 
         printf("N = %d : [",i);
@@ -148,6 +148,30 @@ int main (){
                 correct++;
             }else{ 
                 printf("*");
+            }
+        }
+
+
+        printf("]\n\n");
+    }
+    outFile << total << " " << correct << std::endl;
+
+    printf(" Binary Tree \n");
+    total = correct = 0;
+    for(int i=2;i<=10;i++){
+        int n = pow(2,i+1)-1;
+        Graph *x = generate_binary_tree(n);
+
+        printf("N = %d : [",n);
+        
+        for(int j=1;j<=x->n;j++){
+            bool resp = decide(*x,j);
+            total++;
+            if((resp && j <= (i)) || (!resp && j > (i))){
+                printf("+");
+                correct++;
+            }else{ 
+                printf("* - (%d %d %d %d)",n,i,j,resp);
             }
         }
 

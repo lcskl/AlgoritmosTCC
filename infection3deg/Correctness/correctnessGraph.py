@@ -21,7 +21,7 @@ def loadTimeFile(fileName):
 total,correct = loadTimeFile('correctnessReport.txt')
 ############################################################################
 
-labels = ['G1', 'G2', 'G3', 'G4', 'G5','G6']
+labels = ['G1', 'G2', 'G3', 'G4', 'G5','G6','G7']
 
 x = np.arange(len(labels))  # the label locations
 width = 0.35  # the width of the bars

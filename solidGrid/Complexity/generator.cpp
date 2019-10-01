@@ -76,7 +76,7 @@ int generate_graph_segment(int lenght, Graph *g, int v_created){
     return number_ladders;
 }
 
-pair<Graph,int> generate_random_solidGrid(int n){
+pair<Graph*,int> generate_random_solidGrid(int n){
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> dist1(1,n-4);
@@ -91,13 +91,13 @@ pair<Graph,int> generate_random_solidGrid(int n){
 
     //std:: cout << lenght1 << " | " << lenght2 << " | " << lenght3 << std::endl;
 
-    Graph input_graph(n);
+    Graph *input_graph = new Graph(n);
 
     int total_ladders = 0;
 
-    total_ladders += generate_graph_segment(lenght1,&input_graph,1);
-    total_ladders += generate_graph_segment(lenght2,&input_graph,lenght1+1);
-    total_ladders += generate_graph_segment(lenght3,&input_graph,lenght1+lenght2+1);
+    total_ladders += generate_graph_segment(lenght1,input_graph,1);
+    total_ladders += generate_graph_segment(lenght2,input_graph,lenght1+1);
+    total_ladders += generate_graph_segment(lenght3,input_graph,lenght1+lenght2+1);
 
     //cout << "\nTotal Ladders: " << total_ladders << endl;
 

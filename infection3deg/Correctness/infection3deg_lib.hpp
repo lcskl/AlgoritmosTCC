@@ -34,4 +34,6 @@ Graph generate_inf_cycle(int v);
 
 Graph generate_rand_caterpillar_center2d(int v, int *r);
 
+Graph* generate_binary_tree(int n);
+
 #endif

@@ -24,4 +24,10 @@ int decide(Graph graph,int k);
 
 Graph generate_3deg_graph(int round);
 
+Graph generate_brick_wall(int n);
+
+Graph generate_double_cycle(int n);
+
+Graph generate_diamond_graph(int round);
+
 #endif

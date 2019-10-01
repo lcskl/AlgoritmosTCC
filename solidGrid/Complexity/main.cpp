@@ -34,9 +34,9 @@ int main (){
 
         printf("  Generating Input Graph ... ");
 
-        pair<Graph,int> out = generate_random_solidGrid(i);
+        pair<Graph*,int> out = generate_random_solidGrid(i);
 
-        Graph input = out.first;
+        Graph input = *out.first;
         ladders[i] = out.second;
 
 
