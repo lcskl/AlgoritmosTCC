@@ -22,6 +22,8 @@ int main (){
 
     Graph* testGraph;
 
+    std::cout << "====== Path Graph =====\n";
+
     for(int i=n_min;i<=n_max;i++){
 
         testGraph = generate_path(i);
@@ -31,9 +33,7 @@ int main (){
         for(int k=2;k<i;k++){
 
             testGraph->k = k;
-            bool resp = testGraph->decide;
-
-            std::cout << resp << " ";
+            bool resp = testGraph->CheckInfectionTime();
 
             if((resp && (i-k)<=1) || (!resp && (i-k)>1)){
                 std::cout << "+";

@@ -17,7 +17,7 @@ Graph::Graph(int const& n_vertex){
 }
 
 bool Graph::CheckInfectionTime(){
-    std::string infectedTimeZero;
+    std::string infectedTimeZero = "";
 
     for(int i=1;i<=k;i++){
 
@@ -53,7 +53,7 @@ bool Graph::CheckInfectionTime(){
                     infected_neighbors = 0;
 
                     for(auto neighbor : adjList[j]){
-                        if(infected[neighbor] <= current_time)
+                        if(infected[neighbor] != -1 && infected[neighbor] <= current_time)
                             infected_neighbors++;
                     }
 
@@ -67,7 +67,7 @@ bool Graph::CheckInfectionTime(){
                 current_time++;
             }while(infection_occured);
 
-            if(total_infected == n){
+            if(total_infected == n && (current_time-1) >= n-k){
                 iniInfected = infectedTimeZero;
                 return true;
             }
