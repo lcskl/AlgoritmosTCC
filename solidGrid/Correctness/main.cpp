@@ -22,17 +22,19 @@ int main (){
     printf("Iterations for each size: ");
     scanf("%d",&rep);
 
-    pair<int,pair<int,double> > correctnessResults[ (n_max - n_min + 1) + 1 ];
+    int correctnessResults[ 35 ][2];
+    double time[35];
+    
 
     for(int n_vertices = n_min; n_vertices <= n_max; n_vertices++){
         printf("\n n = %d ",n_vertices);
-        correctnessResults[n_vertices].first = correctnessResults[n_vertices].second.first = 0;
+        correctnessResults[n_vertices][0] = correctnessResults[n_vertices][1] = 0;
 
         auto start = std::chrono::high_resolution_clock::now();
 
         for(int t=0;t<rep;t++){
             printf("."); fflush(stdout);
-            correctnessResults[n_vertices].first++;
+            correctnessResults[n_vertices][0]++;
             Graph *baseGraph = generate_random_solidGrid(n_vertices).first;
             Graph g(n_vertices);
 
@@ -67,7 +69,7 @@ int main (){
             }
 
             if(testResult)
-                correctnessResults[n_vertices].second.first++;
+                correctnessResults[n_vertices][1]++;
 
             delete baseGraph;
 
@@ -76,7 +78,11 @@ int main (){
 
         auto end = std::chrono::high_resolution_clock::now();
 
-        correctnessResults[n_vertices].second.second = (end - start).count();
+        auto elapsed = end - start;
+
+        printf("%d %d %lf\n",correctnessResults[n_vertices][0],correctnessResults[n_vertices][1],time[n_vertices]);
+
+        time[n_vertices] = elapsed.count();
     }
 
     printf("\n Ended \n");
@@ -85,7 +91,7 @@ int main (){
     outFile.open("CorrectnessReport.txt");
 
     for(int i=n_min;i<=n_max;i++)
-        outFile << correctnessResults[i].first << " " << correctnessResults[i].second.first << " " << correctnessResults[i].second.second << std :: endl;
+        outFile << correctnessResults[i][0] << " " << correctnessResults[i][1] << " " << time[i] << std :: endl;
 
     outFile.close();
 
