@@ -76,8 +76,11 @@ int testIfSetSizeKPercolates(Graph g,int k){
 
         infectionTimeK = simulate(g,infected,k);
 
-        if(infectionTimeK >= 3)
+        if(infectionTimeK != -1)
             break;
+
+        std::cout << infectedSet << std::endl;
+
     }while( std::next_permutation(infectedSet.begin(),infectedSet.end()));
 
     return infectionTimeK;

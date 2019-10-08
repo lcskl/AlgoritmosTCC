@@ -1,5 +1,6 @@
 #include <iostream>
 #include "bipartiteK3.hpp"
+#include "bruteForceValidator.hpp"
 
 using namespace std;
 
@@ -21,6 +22,10 @@ int main (){
         x.degree[i] = x.adjList[i].size();
     
     cout << x.is_t_greater_3();
+
+    for(int k=2;k<=n-3;k++){
+        int time = testIfSetSizeKPercolates(x,k);
+    }
 
     return 0;
 }

@@ -90,9 +90,9 @@ bool Graph::is_t_greater_3(){
                             infected_in_simulation.push_back(i);
 
                             if(i == u && t==3){
-                                std::cout << "u: " << u << std::endl;
-                                std::cout << "v: " << v << std::endl;
-                                std::cout << "s: " << s << std::endl;
+                                // std::cout << "u: " << u << std::endl;
+                                // std::cout << "v: " << v << std::endl;
+                                // std::cout << "s: " << s << std::endl;
                                 return true;
                             }
                                 

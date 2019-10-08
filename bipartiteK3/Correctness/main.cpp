@@ -49,10 +49,12 @@ int main (){
                 }
                 getchar(); getchar();
             }
+
+            printf("."); fflush(stdin);
             
             delete input;
         }
-        printf("N = %d => Total: %d Correct %d\n",i,total,correct);
+        printf("\nN = %d => Total: %d Correct %d\n",i,total,correct);
         outFile << i << " " << total << " " << correct << std::endl;
     }
 
