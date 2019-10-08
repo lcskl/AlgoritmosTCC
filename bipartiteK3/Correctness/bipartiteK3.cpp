@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include "bipartiteK3.hpp"
-
+#include <random>
 
 Graph::Graph(int const& n_vertex){
     n = n_vertex;
@@ -39,6 +39,7 @@ bool Graph::is_t_greater_3(){
         //Build Neighborhood and second Neighborhood
         for(auto neighbor : adjList[u]){
             N.push_back(neighbor);
+            in_N[neighbor] = true;
             if(degree[neighbor] > 1)
                 infected[neighbor] = -1;
 
@@ -68,6 +69,8 @@ bool Graph::is_t_greater_3(){
             //Iterate over all Second Neighborhood
             for(auto s : N_2){
                 infected[s] = 0;
+
+                infected_in_simulation.clear();
 
                 //Simulation Process
                 for(int t = 1;t <= 3 && infected[u] == -1;t++){
@@ -110,5 +113,57 @@ bool Graph::is_t_greater_3(){
     }
     return false;
 }
+
+Graph* generate_random_bipartite(int n){
+    Graph* input = new  Graph(n);
+
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist(2,n-2);
+
+    int n1 = dist(rng);
+
+    std::uniform_int_distribution<std::mt19937::result_type> dist2(n1,n-1);
+    std::uniform_int_distribution<std::mt19937::result_type> dist3(0,n1-1);
+
+    for(int i=0;i<n1;i++){
+        for(int j=n1;j<n;j++){
+
+            if(dist(rng) % 2 ){
+                input->adjList[i].push_back(j);
+                input->adjList[j].push_back(i);
+            }
+        }
+    }
+
+
+
+    for(int i=0;i<n1;i++){
+        if(input->adjList[i].size())
+            continue;
+        
+        
+        int j = dist2(rng);    
+
+        input->adjList[i].push_back(j);
+        input->adjList[j].push_back(i);
+    }
+
+    for(int i=n1;i<n;i++){
+        if(input->adjList[i].size())
+            continue;
+        
+        int j = dist3(rng);    
+
+        input->adjList[i].push_back(j);
+        input->adjList[j].push_back(i);
+    }
+
+    for(int i=0;i<n;i++)
+        input->degree[i] = input->adjList[i].size();
+
+    return input;
+}
+
 
 
