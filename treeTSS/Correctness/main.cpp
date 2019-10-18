@@ -1,4 +1,5 @@
 #include "treeTSS.hpp"
+#include "tss_validator.hpp"
 #include <iostream>
 using namespace std;
 
@@ -8,8 +9,10 @@ int main(){
 
     Tree* t = new Tree(n);
 
-    for(int i=0;i<n;i++)
+    for(int i=0;i<n;i++){
         t->tree[i] = new Tree::Node();
+        t->tree[i]->id = i;
+    }
 
     int n_children,child;
     for(int i=0;i<n;i++){
@@ -26,17 +29,18 @@ int main(){
         }
     }
 
-    cout << "Thresholds:\n";
+    //cout << "Thresholds:\n";
 
     for(int i=0;i<n;i++){
-        cout << i << ": ";
         cin >> t->tree[i]->tss_threshold;
         t->tree[i]->t_prime = t->tree[i]->tss_threshold;
     }
 
-    cout << "Executing\n";
+    //cout << "Executing\n";
 
     t->FindTSS();
+
+    cout << "TSS Found: ";
 
     int k = 0;
     for(auto vertex : t->tree){
@@ -45,7 +49,9 @@ int main(){
         k++;
     }
 
+    cout << "\n";
 
+    cout << "Validator: " << smallestTSS(t) << std::endl;
 
     return 0;
 }

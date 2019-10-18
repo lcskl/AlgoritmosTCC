@@ -10,7 +10,6 @@ Tree::Tree(int const& n_vertex){
 }
 
 void Tree::FindTSS(){
-    std::cout << "Initializing\n";
     for(auto vertex : tree){
 
         if(vertex->degree == 1){
@@ -19,21 +18,21 @@ void Tree::FindTSS(){
         }else
             vertex->in_tss = -1;
         
-        std::cout << vertex->in_tss << " ";
+        //std::cout << vertex->in_tss << " ";
     }
 
-    getchar(); getchar();
+    //getchar(); getchar();
 
     while(defined_vertices < n){
 
         int k = 0;
         for(auto vertex : tree){
-            std::cout << k++ << " " << vertex->in_tss << " " << children_defined(vertex) << std::endl; 
+            //std::cout << k++ << " " << vertex->in_tss << " " << children_defined(vertex) << std::endl; 
             if(vertex->in_tss == -1 && children_defined(vertex)){
                 
                 defined_vertices++;
                 
-                std::cout << "Setting vertex\n";
+                //std::cout << "Setting vertex\n";
 
                 if(vertex->t_prime >= 2){
                     vertex->in_tss = 1;
@@ -46,7 +45,6 @@ void Tree::FindTSS(){
                 }
             }
         }
-        getchar();
     }
 
     return;
