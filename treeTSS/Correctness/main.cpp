@@ -21,7 +21,8 @@ int main(){
         cin >> n_children;
 
         t->tree[i]->degree = n_children + 1;
-
+        t->tree[i]->children_in_tss = 0;
+        
         for(int j=0;j<n_children;j++){
             cin >> child;
             t->tree[i]->children.push_back(t->tree[child]);

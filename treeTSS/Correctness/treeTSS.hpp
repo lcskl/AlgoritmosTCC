@@ -14,6 +14,8 @@ public:
         int in_tss;
         int tss_threshold; 
 
+        int children_in_tss;
+
         int id;
 
         Node(){};          

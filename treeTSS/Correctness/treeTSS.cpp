@@ -14,7 +14,8 @@ void Tree::FindTSS(){
 
         if(vertex->degree == 1){
             vertex->in_tss = 0;
-            defined_vertices++;
+            vertex->parent->in_tss = 1;
+            defined_vertices+=2;
         }else
             vertex->in_tss = -1;
         
