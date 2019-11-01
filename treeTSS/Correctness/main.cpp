@@ -1,5 +1,6 @@
 #include "treeTSS.hpp"
 #include "tss_validator.hpp"
+#include "randomTreeGenerator.hpp"
 #include <iostream>
 using namespace std;
 
@@ -7,52 +8,30 @@ int main(){
     int n;
     cin >> n;
 
-    Tree* t = new Tree(n);
+    cout << "Generating new tree...\n";
+
+    Tree* t = generate_random_tree(n);
+
+    cout << "done! \n";
 
     for(int i=0;i<n;i++){
-        t->tree[i] = new Tree::Node();
-        t->tree[i]->id = i;
-    }
-
-    int n_children,child;
-    for(int i=0;i<n;i++){
-
-        cout << i << ": ";
-        cin >> n_children;
-
-        t->tree[i]->degree = n_children + 1;
-        t->tree[i]->children_in_tss = 0;
         
-        for(int j=0;j<n_children;j++){
-            cin >> child;
-            t->tree[i]->children.push_back(t->tree[child]);
-            t->tree[child]->parent = t->tree[i];
+        cout << "Vertex: " << i << std::endl;
+        cout << "   Parent: ";
+
+        if(t->tree[i]->parent != nullptr)
+            cout << t->tree[i]->parent->id << std::endl;
+        else 
+            cout << "NULL" << std::endl;
+        
+        cout << "   Children: ";
+
+        for(auto child : t->tree[i]->children){
+            cout << child->id << " ";
         }
+
+        cout << endl;
     }
-
-    //cout << "Thresholds:\n";
-
-    for(int i=0;i<n;i++){
-        cin >> t->tree[i]->tss_threshold;
-        t->tree[i]->t_prime = t->tree[i]->tss_threshold;
-    }
-
-    //cout << "Executing\n";
-
-    t->FindTSS();
-
-    cout << "TSS Found: ";
-
-    int k = 0;
-    for(auto vertex : t->tree){
-        if(vertex->in_tss > 0)
-            cout << k << " ";
-        k++;
-    }
-
-    cout << "\n";
-
-    cout << "Validator: " << smallestTSS(t) << std::endl;
 
     return 0;
 }

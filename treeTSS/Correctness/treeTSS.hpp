@@ -27,6 +27,10 @@ public:
 
     Tree(int const& n_vertex);
 
+    void insert_edge(int a, int b);
+
+    void delete_edge(int a,int b);
+
     void FindTSS();
 
     bool children_defined(Node* x);
