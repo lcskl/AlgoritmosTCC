@@ -30,7 +30,7 @@ bool simulate(int *infected, Tree* t){
             if(infected[vertex->id] != -1)
                 continue;
 
-            if(debug)std::cout << vertex->id << std::endl;
+            //if(debug)std::cout << vertex->id << std::endl;
 
             n_inf = 0;
             for(auto child : vertex->children)
@@ -47,7 +47,7 @@ bool simulate(int *infected, Tree* t){
             
             
             if(n_inf >= vertex->tss_threshold){
-                if(debug) std::cout << "Infected\n";
+                //if(debug) std::cout << "Infected\n";
                 infected[vertex->id] = time;
                 infection_occured = true;
                 total_infected++;
