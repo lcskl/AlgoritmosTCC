@@ -12,6 +12,7 @@ void printTree(Tree* t){
         
         cout << "Vertex: " << i << std::endl;
         cout << "   TSS Treshold: " << t->tree[i]->tss_threshold << endl;
+        cout << "   In TSS? " << t->tree[i]->in_tss << endl;
         cout << "   Parent: " << flush;
 
         if(t->tree[i]->parent != nullptr)
@@ -43,7 +44,7 @@ int main(){
 
     int correct,total;
 
-    for(int n=5;n<=n_max;n++){
+    for(int n=5;n<=n_max;n+=5){
         std::cout << n << ": " << flush;
         file << n << " ";
         total = correct = 0;
@@ -70,8 +71,12 @@ int main(){
             if(tss_size == bruteForceResp){
                 std::cout << "." << flush;
                 correct++;
-            }else 
-                std::cout << "x" << flush;
+            }else{ 
+                std::cout << "x - " << tss_size << " =/= " << bruteForceResp << flush;
+                printTree(t);
+                getchar(); getchar();
+            }
+            delete t;
         }
         std::cout << endl;
         file << total << " " << correct << endl;
