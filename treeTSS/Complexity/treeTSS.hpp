@@ -32,8 +32,6 @@ public:
     void delete_edge(int a,int b);
 
     void FindTSS();
-
-    bool children_defined(Node* x);
 };
 
 #endif

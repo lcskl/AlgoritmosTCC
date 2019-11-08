@@ -50,7 +50,7 @@ void Tree::FindTSS(){
 
     std::queue<Tree::Node*> vertex_ready;
     for(auto vertex : tree)
-        if(vertex->in_tss == -1 && children_defined(vertex))
+        if(vertex->in_tss == -1 && vertex->children_in_tss == vertex->children.size())
             vertex_ready.push(vertex);
     
     while(!vertex_ready.empty()){
@@ -74,36 +74,6 @@ void Tree::FindTSS(){
         }
     }
 
-    // while(defined_vertices < n){
-    //     int k = 0;
-    //     for(auto vertex : tree){
-    //         //std::cout << k++ << " " << vertex->in_tss << " " << children_defined(vertex) << std::endl; 
-    //         if(vertex->in_tss == -1 && children_defined(vertex)){
-                
-    //             defined_vertices++;
-                
-    //             //std::cout << "Setting vertex: " << vertex->id << "\n";
-
-    //             if(vertex->t_prime >= 2 || (vertex->t_prime == 1 && vertex->parent == nullptr)  ){
-    //                 vertex->in_tss = 1;
-    //                 if(vertex->parent != nullptr)
-    //                     vertex->parent->t_prime--;
-    //             }else{
-    //                 vertex->in_tss = 0;
-    //                 if(vertex->t_prime <= 0 && vertex->parent != nullptr)
-    //                     vertex->parent->t_prime--;
-    //             }
-    //         }
-    //     }
-    // }
-
     return;
 }
 
-bool Tree::children_defined(Tree::Node* x){
-    for(auto child : x->children){
-        if(child->in_tss == -1)
-            return false;
-    }
-    return true;
-}

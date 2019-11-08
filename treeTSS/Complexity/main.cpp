@@ -23,7 +23,7 @@ int main(){
     int64_t maxTime;
 
 
-    for(int n=5;n<=n_max;n+=5){
+    for(int n=5;n<=n_max;n+=500){
         std::cout << n << ": " << flush;
         file << n << " ";
 
@@ -38,7 +38,7 @@ int main(){
 
             auto end = std::chrono::high_resolution_clock::now();
 
-            maxTime = max(maxTime, std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() );
+            maxTime = max(maxTime, std::chrono::duration_cast<std::chrono::microseconds>( end - start ).count() );
             
             delete t;
         }
