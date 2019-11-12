@@ -49,7 +49,7 @@ int main (){
 
         auto elapsed = std::chrono::duration_cast<std::chrono::microseconds> (end - start);
         
-        printf("  Execution time: %ld s\n",elapsed.count());
+        printf("  Execution time: %ld us\n",elapsed.count());
 
         exec_times.push_back( make_pair(i,elapsed.count()) );
 

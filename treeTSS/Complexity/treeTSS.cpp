@@ -53,7 +53,10 @@ void Tree::FindTSS(){
         if(vertex->in_tss == -1 && vertex->children_in_tss == vertex->children.size())
             vertex_ready.push(vertex);
     
+    int op = 0;
     while(!vertex_ready.empty()){
+
+        printf("Operation count: %d\n",++op);
 
         Node* vertex = vertex_ready.front(); vertex_ready.pop();
 
@@ -69,7 +72,7 @@ void Tree::FindTSS(){
 
         if(vertex->parent != nullptr){
             vertex->parent->children_in_tss++;
-            if(vertex->parent->children_in_tss == vertex->parent->children.size())
+            if(vertex->parent->in_tss == -1 && vertex->parent->children_in_tss == vertex->parent->children.size())
                 vertex_ready.push(vertex->parent);
         }
     }
