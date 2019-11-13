@@ -2,6 +2,7 @@
 #define TREE_TSS_HPP
 
 #include <vector>
+#include <queue>
 
 class Tree{
 public:
@@ -22,7 +23,7 @@ public:
     };
 
     int n;
-    int defined_vertices;
+    std::queue < Node* > vertex_ready; 
     std::vector< Node* > tree;
 
     Tree(int const& n_vertex);

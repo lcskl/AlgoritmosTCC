@@ -2,12 +2,13 @@
 #include <iostream>
 #include <queue>
 #include <cstdio>
+#include <chrono>
 
 Tree::Tree(int const& n_vertex){
     this->n = n_vertex;
     this->tree.resize(n_vertex);
 
-    this->defined_vertices = 0;
+    //this->defined_vertices = 0;
 }
 
 void Tree::insert_edge(int a, int b){
@@ -30,33 +31,13 @@ void Tree::delete_edge(int a,int b){
 }
 
 void Tree::FindTSS(){
-    for(auto vertex : tree)
-        vertex->children_in_tss = 0;
-    
-
-    for(auto vertex : tree){
-        vertex->t_prime = vertex->tss_threshold;
-
-        if(vertex->degree == 1){
-            vertex->in_tss = 0;
-            defined_vertices+=1;
-
-            if(vertex->parent != nullptr)
-                vertex->parent->children_in_tss++;
-        }else{
-            vertex->in_tss = -1;
-        }
-    }
-
-    std::queue<Tree::Node*> vertex_ready;
-    for(auto vertex : tree)
-        if(vertex->in_tss == -1 && vertex->children_in_tss == vertex->children.size())
+    for(auto vertex : this->tree)
+        if(vertex->in_tss == -1 && vertex->children_in_tss == vertex->degree)
             vertex_ready.push(vertex);
-    
-    int op = 0;
+
     while(!vertex_ready.empty()){
 
-        printf("Operation count: %d\n",++op);
+        //printf("Operation count: %d\n",++op);
 
         Node* vertex = vertex_ready.front(); vertex_ready.pop();
 
@@ -72,11 +53,10 @@ void Tree::FindTSS(){
 
         if(vertex->parent != nullptr){
             vertex->parent->children_in_tss++;
-            if(vertex->parent->in_tss == -1 && vertex->parent->children_in_tss == vertex->parent->children.size())
+            if(vertex->parent->in_tss == -1 && vertex->parent->children_in_tss == vertex->parent->degree)
                 vertex_ready.push(vertex->parent);
         }
     }
-
     return;
 }
 
