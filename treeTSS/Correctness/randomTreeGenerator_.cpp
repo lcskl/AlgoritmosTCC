@@ -120,22 +120,6 @@ Tree* convert_to_rooted_tree(SimpleGraph *g){
     if(all_one)
         new_tree->tree[root]->tss_threshold++;
 
-    for(auto vertex : new_tree->tree)
-        vertex->children_in_tss = 0;
-
-    for(auto vertex : new_tree->tree){
-        vertex->t_prime = vertex->tss_threshold;
-
-        if(vertex->degree == 1){
-            vertex->in_tss = 0;
-
-            if(vertex->parent != nullptr)
-                vertex->parent->children_in_tss++;
-        }else{
-            vertex->in_tss = -1;
-        }
-    }
-
     return new_tree;
 }
 

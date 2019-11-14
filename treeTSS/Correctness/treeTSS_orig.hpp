@@ -2,7 +2,6 @@
 #define TREE_TSS_HPP
 
 #include <vector>
-#include <queue>
 
 class Tree{
 public:
@@ -23,7 +22,7 @@ public:
     };
 
     int n;
-    std::queue < Node* > vertex_ready; 
+    int defined_vertices;
     std::vector< Node* > tree;
 
     Tree(int const& n_vertex);
@@ -33,6 +32,8 @@ public:
     void delete_edge(int a,int b);
 
     void FindTSS();
+
+    bool children_defined(Node* x);
 };
 
 #endif
