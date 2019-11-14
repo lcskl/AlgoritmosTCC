@@ -32,7 +32,7 @@ void Tree::delete_edge(int a,int b){
 
 void Tree::FindTSS(){
     for(auto vertex : this->tree)
-        if(vertex->in_tss == -1 && vertex->children_in_tss == vertex->degree)
+        if(vertex->in_tss == -1 && vertex->children_in_tss == (vertex->degree - (vertex->parent != nullptr)))
             vertex_ready.push(vertex);
 
     while(!vertex_ready.empty()){
@@ -53,8 +53,8 @@ void Tree::FindTSS(){
 
         if(vertex->parent != nullptr){
             vertex->parent->children_in_tss++;
-            if(vertex->parent->in_tss == -1 && vertex->parent->children_in_tss == vertex->parent->degree)
-                vertex_ready.push(vertex->parent);
+            if(vertex->parent->in_tss == -1 && vertex->parent->children_in_tss == (vertex->parent->degree - (vertex->parent->parent != nullptr)))
+                this->vertex_ready.push(vertex->parent);
         }
     }
     return;
