@@ -29,7 +29,7 @@ int main (){
         auto start = std::chrono::high_resolution_clock::now();
 
         for(int j=1;j<=i;j++){
-            for(int k=1;k<=log2(i);k++){
+            for(int k=1;k<=20;k++){
             //     for(int l=1;l<=i;l++){
             //         for(int n=1;n<=i;n++){
                         double r = 273761253/1232;

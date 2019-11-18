@@ -26,7 +26,7 @@ yInterp = f(xInterp)
 
 ############################################################################
 
-#### O(n^2) Execution Time GuideLine #######################################
+#### O(n) Execution Time GuideLine #######################################
 x2,y2 = loadTimeFile('complexityGuide_n.txt')
 f2 = interpolate.interp1d(x2,y2,kind='quadratic',fill_value="extrapolate")
 
@@ -34,17 +34,11 @@ xInterp_n2 = np.arange(0,max(x))
 yInterp_n2 = f2(xInterp_n2)
 #############################################################################
 
-#### O(n^2) Execution Time GuideLine #######################################
-x3,y3 = loadTimeFile('complexityGuide_nlogn.txt')
+#### O(n.logn) Execution Time GuideLine #######################################
+x3,y3 = loadTimeFile('complexityGuide_log.txt')
 f3 = interpolate.interp1d(x3,y3,kind='quadratic',fill_value="extrapolate")
 
-m = -1
-for i in np.arange(0,max(x),10):
-    if( f3(i) > max(y) ):
-        m = i
-        break
-
-xInterp_n3 = np.arange(0,m)
+xInterp_n3 = np.arange(0,max(x))
 yInterp_n3 = f3(xInterp_n3)
 #############################################################################
 
@@ -52,7 +46,7 @@ yInterp_n3 = f3(xInterp_n3)
 plt.scatter(x, y, edgecolors='r')
 plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
 
-algorithmLine, = plt.plot(xInterp,yInterp, label='Algorithm: Solid Grid')
+algorithmLine, = plt.plot(xInterp,yInterp, label='Algorithm: TSS in Trees')
 guide_On2, = plt.plot(xInterp_n2,yInterp_n2, label='Guide Curve $O(n)$')
 guide_On3, = plt.plot(xInterp_n3, yInterp_n3, label='Guide Curve $O(n log(n))$')
 
