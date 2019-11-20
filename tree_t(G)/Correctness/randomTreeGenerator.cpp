@@ -80,3 +80,14 @@ Graph* generate_random_tree(int n){
 
     return g;
 }
+
+void randomizePercolationLimit(Graph* g){
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    for(int v = 0; v < g->n ; v++){
+        std::uniform_int_distribution<int> dist(1,g->adjList[v].size());
+        g->perc_limit[v] = dist(gen);
+        g->neighbors_remaining[v] = g->perc_limit[v];
+    }
+}

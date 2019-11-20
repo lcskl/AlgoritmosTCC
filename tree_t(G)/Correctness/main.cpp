@@ -21,32 +21,37 @@ int main(){
         for(int k=0;k<rep;k++){
             Graph* g = generate_random_tree(n_vertex);
 
-            int respAlg = g->max_time();
+            for(int l=0;l<10;l++){
+                randomizePercolationLimit(g);
 
-            int respBF = -1;
-            for(int j=1;j<n_vertex;j++){
-                respBF = std::max(respBF,testIfSetSizeKPercolates(g,j));     
-            }
+                int respAlg = g->max_time_arbitrary();
 
-            char op;
+                int respBF = -1;
+                for(int j=1;j<n_vertex;j++){
+                    respBF = std::max(respBF,testIfSetSizeKPercolates(g,j));     
+                }
 
-            if(respBF == respAlg)
-                printf(".");
-            else{ 
-                printf("x");
-                scanf(" %c",&op);
-                if(op == 's'){
-                    printf("Veredict -> Alg: %d BruteForce: %d\n",respAlg,respBF);
+                char op;
 
-                    printf("Tree:\n");
-                    for(int i=0;i<n_vertex;i++){
-                        printf("%d: ",i);
-                        for(auto v : g->adjList[i])
-                            printf("%d ",v);
-                        printf("\n");
+                if(respBF == respAlg)
+                    printf(".");
+                else{ 
+                    printf("x");
+                    scanf(" %c",&op);
+                    if(op == 's'){
+                        printf("Veredict -> Alg: %d BruteForce: %d\n",respAlg,respBF);
+
+                        printf("Tree:\n");
+                        for(int i=0;i<n_vertex;i++){
+                            printf("%d (%d): ",i,g->perc_limit[i]);
+                            for(auto v : g->adjList[i])
+                                printf("%d ",v);
+                            printf("\n");
+                        }
                     }
                 }
-            }      
+            }
+            printf(" / ");
 
             delete g;
         }

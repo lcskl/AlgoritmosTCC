@@ -12,4 +12,6 @@ int simulate(Graph g, int* infected,int k);
 
 int testIfSetSizeKPercolates(Graph *g,int k);
 
+void randomizePercolationLimit(Graph* g);
+
 #endif

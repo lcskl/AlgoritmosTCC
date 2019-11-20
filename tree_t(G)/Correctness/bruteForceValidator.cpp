@@ -36,7 +36,7 @@ int simulate(Graph *g, int* infected,int k){
             }
 
 
-            if(infected_neighbors >= 2){
+            if(infected_neighbors >= g->perc_limit[i]){
                 infection_occured = true;
                 total_infected++;
                 infected[i] = current_time + 1; 
