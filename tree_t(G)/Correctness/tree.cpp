@@ -31,6 +31,7 @@ void Graph::remove_edge(int a,int b){
 }
 
 int Graph::calculate(int u,int v){
+    //printf("    %d  %d\n",u,v);
     if(this->s[u][v] != -1)
         return this->s[u][v];
 
@@ -126,7 +127,7 @@ int Graph::max_time_arbitrary(){
 
 
     for(int x = 0;x < n; x++){
-        if(this->adjList[x].size() > this->perc_limit[x]){ //Leaves always will be infected at time 0
+        if(this->adjList[x].size() < this->perc_limit[x]){ //Leaves always will be infected at time 0 in P3 Bootstrap Percolation
             this->inf_time[x] = 0;
             for(auto neighbor : this->adjList[x]){
                 this->neighbors_remaining[neighbor]--;
@@ -160,22 +161,39 @@ int Graph::max_time_arbitrary(){
             for(auto v : this->adjList[u])
                 this->s[u][v] = this->inf_time[u];
         }else{
-            for(auto v : this->adjList[u])
-                remaining.push_back( std::make_pair(u,v) );
+            if(this->adjList[u].size() <= this->perc_limit[u]){
+                for(auto v : this->adjList[u])
+                    this->s[u][v] = 0;
+            }else{
+                for(auto v : this->adjList[u])
+                    remaining.push_back( std::make_pair(u,v) );
+            }
         }
     }
 
-    for(auto edge : remaining)
+    for(auto edge : remaining){
+        // printf("Calculating edge %d--%d\n",edge.first,edge.second);
+        // getchar();
         this->s[edge.first][edge.second] = calculate(edge.first,edge.second);
+    }
     
+    // for(int i=0;i<n;i++){
+    //     for(int j=0;j<n;j++){
+    //         printf("%d ",this->s[i][j]);
+    //     }
+    //     printf("\n");
+    // }
+
     int t_G = -1;
     for(int u=0;u<n;u++){
+        //printf("u: %d ",u);
         if(this->inf_time[u] == -1){
             int maxU = -1;
-            for(auto x : this->adjList[u])
+            for(int x=0;x<n;x++)
                 maxU = std::max(maxU,this->s[x][u]);
             this->inf_time[u] = 1 + maxU;
         }
+        //printf("inf: %d\n",this->inf_time[u]);
         t_G = std::max(t_G, this->inf_time[u]);
     }
     return t_G;

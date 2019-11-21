@@ -27,7 +27,7 @@ int main(){
                 int respAlg = g->max_time_arbitrary();
 
                 int respBF = -1;
-                for(int j=1;j<n_vertex;j++){
+                for(int j=1;j<=n_vertex;j++){
                     respBF = std::max(respBF,testIfSetSizeKPercolates(g,j));     
                 }
 
@@ -51,7 +51,7 @@ int main(){
                     }
                 }
             }
-            printf(" / ");
+            printf(" / \n");
 
             delete g;
         }
@@ -59,9 +59,26 @@ int main(){
         
     }
 
+    // scanf("%d",&n_vertex);
 
+    // Graph* g = new Graph(n_vertex);
 
-    
+    // int n_child,viz;
+    // for(int i=0;i<n_vertex;i++){
+    //     scanf("%d",&n_child);
+    //     for(int j=0;j<n_child;j++){
+    //         scanf("%d",&viz);
+    //         g->add_edge(i,viz);
+    //     }
+    //     int l;
+    //     printf("Limite: ");
+    //     scanf("%d",&l);
+    //     g->perc_limit[i] = g->neighbors_remaining[i] = l;
+    // }
+
+    // int resp = g->max_time_arbitrary();
+
+    // printf("Resposta: %d\n",resp);
 
     return 0;
 }

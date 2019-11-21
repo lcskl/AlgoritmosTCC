@@ -85,8 +85,16 @@ void randomizePercolationLimit(Graph* g){
     std::random_device rd;
     std::mt19937 gen(rd());
 
+    for(int i=0;i<g->n;i++){
+        g->inf_time[i] = -1;
+        g->max_neighbor_time[i] = -1;
+        for(int j=0;j<g->n;j++)
+            g->s[i][j] = -1;
+    }
+
+
     for(int v = 0; v < g->n ; v++){
-        std::uniform_int_distribution<int> dist(1,g->adjList[v].size());
+        std::uniform_int_distribution<int> dist(1,g->adjList[v].size()+2);
         g->perc_limit[v] = dist(gen);
         g->neighbors_remaining[v] = g->perc_limit[v];
     }

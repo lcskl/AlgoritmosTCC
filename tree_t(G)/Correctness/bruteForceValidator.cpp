@@ -59,20 +59,21 @@ int testIfSetSizeKPercolates(Graph *g,int k){
     std::vector<int> remainingVertices;
 
     //Detect degree 1 vertices
-    for(int i=0;i<g->n;i++){
-        if(g->adjList[i].size() == 1){
-            infected_at_0.push_back(i);
-        }else
-        {
-            remainingVertices.push_back(i);
-        }
-    }
+    // for(int i=0;i<g->n;i++){
+    //     if(g->adjList[i].size() == 1){
+    //         infected_at_0.push_back(i);
+    //     }else
+    //     {
+    //         remainingVertices.push_back(i);
+    //     }
+    // }
 
-    int permutationVertices = remainingVertices.size();
+    // int permutationVertices = remainingVertices.size();
+
     std::string infectedSet = "";
 
-    for(int i=0;i<permutationVertices;i++){
-        if(i>=(permutationVertices - (k - infected_at_0.size())))
+    for(int i=0;i<n;i++){
+        if(i>=(n - k))
             infectedSet.push_back('1');
         else 
             infectedSet.push_back('0');
@@ -85,9 +86,9 @@ int testIfSetSizeKPercolates(Graph *g,int k){
     do{
         cleanInfectedArray(infected,n,infected_at_0);
 
-        for(int i=0;i<permutationVertices;i++){
+        for(int i=0;i<n;i++){
             if(infectedSet[i] == '1')
-                infected[ remainingVertices[i] ] = 0;
+                infected[ i ] = 0;
         }
 
         infectionTimeK = simulate(g,infected,k);
