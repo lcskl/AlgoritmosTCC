@@ -2,6 +2,7 @@
 #include "bruteForceValidator.hpp"
 #include <string>
 #include <algorithm>
+#include <iostream>
 
 void cleanInfectedArray(int *infected,int n,std::vector<int> infected_at_0){
     for(int i=0;i<=n;i++)
@@ -35,8 +36,10 @@ int simulate(Graph *g, int* infected,int k){
                 }
             }
 
-
+            //std::cout << i << " -> " << g->perc_limit[i] << " => " << infected_neighbors << std::endl;
             if(infected_neighbors >= g->perc_limit[i]){
+                // if(debug)
+                //     std::cout << "Infecting " << i << " at time" << current_time+1 << std::endl;
                 infection_occured = true;
                 total_infected++;
                 infected[i] = current_time + 1; 
@@ -54,6 +57,8 @@ int simulate(Graph *g, int* infected,int k){
 }
 
 int testIfSetSizeKPercolates(Graph *g,int k){
+    //std::cout << "Testing size " << k << std::endl;
+
     int n = g->n;
     std::vector<int> infected_at_0;
     std::vector<int> remainingVertices;
@@ -86,12 +91,19 @@ int testIfSetSizeKPercolates(Graph *g,int k){
     do{
         cleanInfectedArray(infected,n,infected_at_0);
 
+        //std::cout << infectedSet << " -> ";
+
         for(int i=0;i<n;i++){
             if(infectedSet[i] == '1')
                 infected[ i ] = 0;
         }
 
+        // bool debug;
+        // std::cin >> debug;
+
         infectionTimeK = simulate(g,infected,k);
+
+        //std::cout << infectionTimeK << std::endl;
 
         if(infectionTimeK != -1)
             maxTime = std::max(maxTime,infectionTimeK);

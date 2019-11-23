@@ -5,4 +5,6 @@
 
 Graph* generate_random_tree(int n);
 
+void randomizePercolationLimit(Graph* g);
+
 #endif

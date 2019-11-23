@@ -86,6 +86,7 @@ void randomizePercolationLimit(Graph* g){
     std::mt19937 gen(rd());
 
     for(int i=0;i<g->n;i++){
+        g->maxS[i] = -1;
         g->inf_time[i] = -1;
         g->max_neighbor_time[i] = -1;
         for(int j=0;j<g->n;j++)
