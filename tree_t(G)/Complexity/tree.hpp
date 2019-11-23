@@ -6,7 +6,7 @@
 class Graph{
 public:
     int n;
-    int** s;
+    std::vector< std::vector<int> > s;
     std::vector< std::vector<int> > adjList;
     std::vector< int > inf_time;
     std::vector< int > neighbors_remaining;

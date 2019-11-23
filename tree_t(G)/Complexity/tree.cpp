@@ -14,9 +14,9 @@ Graph::Graph(int const& n_vertex){
     this->perc_limit.resize(n_vertex,-1);
     this->maxS.resize(n_vertex,-1);
 
-    this->s = new int*[n_vertex];
+    this->s.resize(n_vertex);
     for(int i=0;i<n_vertex;i++){
-        this->s[i] = new int[n_vertex]();
+        this->s[i].resize(n_vertex);
         for(int j=0;j<n_vertex;j++)
             this->s[i][j] = -1;
     }
