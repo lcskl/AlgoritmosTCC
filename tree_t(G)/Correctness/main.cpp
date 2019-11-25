@@ -3,6 +3,7 @@
 #include "bruteForceValidator.hpp"
 #include <cstdio>
 #include <algorithm>
+#include <fstream>
 
 int main(){
     int n_vertex,maxN,rep;
@@ -13,7 +14,13 @@ int main(){
     printf("Repetitions per Vertex Size: ");
     scanf("%d",&rep);
 
+    std::ofstream file;
+    file.open("testReport.txt");
+
+    int total,corr;
+
     for(int i=5;i<=maxN;i++){
+        total = corr = 0;
         printf("%d: ",i);
 
         n_vertex = i;
@@ -33,9 +40,12 @@ int main(){
 
                 char op;
 
-                if(respBF == respAlg)
+                total++;
+
+                if(respBF == respAlg){
+                    corr++;
                     printf(".");
-                else{ 
+                }else{ 
                     printf("x");
                     scanf(" %c",&op);
                     if(op == 's'){
@@ -55,9 +65,13 @@ int main(){
 
             delete g;
         }
+
+        file << i << " " << total << " " << corr << std::endl;
+
         printf("\n");
-        
     }
+
+    file.close();
 
     // scanf("%d",&n_vertex);
 
