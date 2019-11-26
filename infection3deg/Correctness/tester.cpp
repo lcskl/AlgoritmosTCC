@@ -67,18 +67,17 @@ int main (){
 
     printf(" 'Complete' Caterpillar Graph \n");
 
-    //Caterplillar Graphs
+    //Complete Caterplillar Graphs
     total = correct = 0;
-    for(int i=4;i<=30;i+=2){
+    for(int i=6;i<=30;i+=2){
         Graph x = generate_complete_caterpillar(i);
-        
 
         printf("N = %d : [",i);
 
         for(int j=1;j<=i;j++){
             bool resp = decide(x,j);
             total++;
-            if((resp && j <= floor((i-1)/2)) || (!resp && j > floor((i-1)/2))){
+            if(  (resp && j <= floor(i/4) ) || ( !resp && j > floor(i/4) )){
                 correct++;
                 printf("+");
             }else 

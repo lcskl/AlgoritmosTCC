@@ -163,25 +163,18 @@ Graph generate_complete_caterpillar(int v){
 
     for(int i=0;i<v;i++){
         if( i < floor((v-1)/2) ){
-            if(i==0)
-                inputGraph.degree[i] = 2;
-            else 
-                inputGraph.degree[i] = 3;
+            inputGraph.degree[i] = 3;
         }else{
             inputGraph.degree[i] = 1;
         }
     }
 
     for(int i=0;i<floor((v-1)/2);i++){
-        inputGraph.adjList[i].push_back(i + floor(v/2));
-        inputGraph.adjList[i + floor(v/2)].push_back(i);
-        if(i != floor(v/2) - 1){
-            inputGraph.adjList[i].push_back(i+1);
-            inputGraph.adjList[i+1].push_back(i);
-        }else{
-            inputGraph.adjList[i].push_back(v-1);
-            inputGraph.adjList[v-1].push_back(i);
-        }
+        inputGraph.adjList[i].push_back( v - i - 2 );
+        inputGraph.adjList[v - i - 2 ].push_back(i);
+
+        inputGraph.adjList[i].push_back(i+1);
+        inputGraph.adjList[i+1].push_back(i);
     }
 
     inputGraph.adjList[0].push_back(v-1);
