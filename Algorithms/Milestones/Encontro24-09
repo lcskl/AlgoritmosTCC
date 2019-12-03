@@ -1,0 +1,15 @@
+1. Modificações na escrita:
+    Verificar pontuação no lema.
+    Trocar: Teste de Corretude por Testes da Implementação (Classe em vez de topologia)
+
+2. Infection 3 deg:
+    Verificar complexidade.
+    Teste com "PAREDE DE TIJOLOS":
+        *--*--*--*
+        |     |   
+        *--*--*--*
+           |     |
+        *--*--*--*
+        |     |   
+        *--*--*--*
+
